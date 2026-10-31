@@ -219,26 +219,20 @@ export default function TaskModal({ isOpen, onClose, onSave, editingTask, initia
           </div>
 
           {/* Footer Actions */}
-          <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-between">
-            <span className="text-[11px] text-neutral-400 dark:text-neutral-500 font-mono">
-              Press <kbd className="px-1 py-0.5 bg-neutral-200 dark:bg-neutral-800 rounded">Ctrl+Enter</kbd> to save
-            </span>
-
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={onClose}
-                className="px-4 py-2 text-xs font-semibold rounded-lg border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                className="px-4 py-2 text-xs font-semibold rounded-lg bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors shadow-xs"
-              >
-                {editingTask ? 'Save Changes' : 'Create Task'}
-              </button>
-            </div>
+          <div className="pt-4 border-t border-neutral-100 dark:border-neutral-800 flex items-center justify-end gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="px-4 py-2 text-xs font-semibold rounded-lg border border-neutral-300 dark:border-neutral-700 text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 text-xs font-semibold rounded-lg bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 hover:bg-neutral-800 dark:hover:bg-neutral-200 transition-colors shadow-xs"
+            >
+              {editingTask ? 'Save Changes' : 'Create Task'}
+            </button>
           </div>
         </form>
       </div>
