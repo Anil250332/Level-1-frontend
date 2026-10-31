@@ -1,44 +1,182 @@
-import React from 'react';
-import { Layers, Sun, Moon } from 'lucide-react';
+import React, { useState } from 'react';
+import { Layers, Sun, Moon, Terminal, Radio, X } from 'lucide-react';
 
 export default function Navbar({
   darkMode,
   setDarkMode,
   storageSource,
 }) {
+  const [showShortcuts, setShowShortcuts] = useState(false);
+
   return (
-    <header className="sticky top-0 z-30 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between py-3.5">
-          {/* Logo & Product Title */}
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-neutral-900 dark:bg-white flex items-center justify-center text-white dark:text-neutral-900 font-bold shadow-xs">
-              <Layers size={18} />
-            </div>
-            <div>
+    <>
+      <header className="sticky top-0 z-30 bg-white/90 dark:bg-neutral-950/90 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between py-3">
+            {/* Left: Brand, Breadcrumb & Sprint Tag */}
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-lg bg-neutral-900 dark:bg-white flex items-center justify-center text-white dark:text-neutral-900 font-bold shadow-xs">
+                <Layers size={17} />
+              </div>
+
               <div className="flex items-center gap-2">
                 <span className="font-extrabold tracking-tight text-neutral-900 dark:text-white text-base">
                   CODERUSH
                 </span>
-              
+                <span className="text-neutral-300 dark:text-neutral-700 font-light">/</span>
+                <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                  Smart Kanban
+                </span>
+                <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                  Sprint 1.0
+                </span>
               </div>
-           
+            </div>
+
+            {/* Center: Live System & DB Status Pill */}
+            <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100/80 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 text-xs font-mono">
+              <Radio size={12} className="text-emerald-500 animate-pulse" />
+              <span className="text-neutral-700 dark:text-neutral-300 font-medium">
+                {storageSource === 'mongodb' ? 'MongoDB Atlas' : 'Local Storage Sync'}
+              </span>
+              <span className="text-neutral-400 dark:text-neutral-600">•</span>
+              <span className="text-neutral-500 dark:text-neutral-400 text-[11px]">
+                3 Columns Active
+              </span>
+            </div>
+
+            {/* Right: Team Avatars Stack, Shortcuts, GitHub & Theme */}
+            <div className="flex items-center gap-2.5">
+              {/* Team Members Presence Stack */}
+              <div className="hidden lg:flex items-center -space-x-1.5 pl-2">
+                <div
+                  title="Team Lead: Anil Sahu"
+                  className="w-7 h-7 rounded-full bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-[10px] font-bold flex items-center justify-center border-2 border-white dark:border-neutral-950 shadow-xs"
+                >
+                  AS
+                </div>
+                <div
+                  title="Frontend & UI"
+                  className="w-7 h-7 rounded-full bg-neutral-700 dark:bg-neutral-300 text-white dark:text-neutral-900 text-[10px] font-bold flex items-center justify-center border-2 border-white dark:border-neutral-950 shadow-xs"
+                >
+                  CR
+                </div>
+                <div
+                  title="Active Workspace"
+                  className="w-7 h-7 rounded-full bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-[10px] font-medium flex items-center justify-center border-2 border-white dark:border-neutral-950 shadow-xs"
+                >
+                  +2
+                </div>
+              </div>
+
+              {/* Keyboard Shortcuts Helper Button */}
+              <button
+                type="button"
+                onClick={() => setShowShortcuts(true)}
+                title="Keyboard Shortcuts"
+                className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-mono transition-colors"
+              >
+                <Terminal size={13} />
+                <span>Shortcuts</span>
+              </button>
+
+              {/* GitHub Link */}
+              <a
+                href="https://github.com/Anil250332/Level-1-frontend"
+                target="_blank"
+                rel="noreferrer"
+                title="View GitHub Repository"
+                className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              >
+                <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                </svg>
+              </a>
+
+              {/* Theme Toggle */}
+              <button
+                type="button"
+                onClick={() => setDarkMode(!darkMode)}
+                title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+                className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+              >
+                {darkMode ? <Sun size={15} /> : <Moon size={15} />}
+              </button>
             </div>
           </div>
+        </div>
+      </header>
 
-          {/* Right Action: Theme Switch */}
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setDarkMode(!darkMode)}
-              title={darkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-              className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-            >
-              {darkMode ? <Sun size={15} /> : <Moon size={15} />}
-            </button>
+      {/* Keyboard Shortcuts Modal */}
+      {showShortcuts && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-150">
+          <div className="w-full max-w-md bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-2xl p-6">
+            <div className="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800 mb-4">
+              <div className="flex items-center gap-2">
+                <Terminal size={16} />
+                <h3 className="text-sm font-bold text-neutral-900 dark:text-white">
+                  Keyboard Shortcuts & Tips
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowShortcuts(false)}
+                className="p-1 rounded text-neutral-400 hover:text-neutral-900 dark:hover:text-white"
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div className="flex items-center justify-between py-1 border-b border-neutral-100 dark:border-neutral-800/60">
+                <span className="text-neutral-600 dark:text-neutral-400">Save Task in Modal</span>
+                <kbd className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 font-mono text-[11px] border border-neutral-200 dark:border-neutral-700">
+                  Ctrl + Enter
+                </kbd>
+              </div>
+
+              <div className="flex items-center justify-between py-1 border-b border-neutral-100 dark:border-neutral-800/60">
+                <span className="text-neutral-600 dark:text-neutral-400">Close Open Modal</span>
+                <kbd className="px-2 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 font-mono text-[11px] border border-neutral-200 dark:border-neutral-700">
+                  Esc
+                </kbd>
+              </div>
+
+              <div className="flex items-center justify-between py-1 border-b border-neutral-100 dark:border-neutral-800/60">
+                <span className="text-neutral-600 dark:text-neutral-400">Reorder / Move Task</span>
+                <span className="font-mono text-neutral-900 dark:text-white text-[11px]">
+                  Drag & Drop Card
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between py-1 border-b border-neutral-100 dark:border-neutral-800/60">
+                <span className="text-neutral-600 dark:text-neutral-400">Quick Column Step</span>
+                <span className="font-mono text-neutral-900 dark:text-white text-[11px]">
+                  prev / next buttons
+                </span>
+              </div>
+
+              <div className="flex items-center justify-between py-1">
+                <span className="text-neutral-600 dark:text-neutral-400">Instant Search</span>
+                <span className="font-mono text-neutral-900 dark:text-white text-[11px]">
+                  Search Box (below metrics)
+                </span>
+              </div>
+            </div>
+
+            <div className="mt-5 pt-3 border-t border-neutral-100 dark:border-neutral-800 text-right">
+              <button
+                type="button"
+                onClick={() => setShowShortcuts(false)}
+                className="px-4 py-1.5 rounded-lg bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 text-xs font-semibold"
+              >
+                Got it
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </header>
+      )}
+    </>
   );
 }
