@@ -20,9 +20,7 @@ export default function Navbar({
                 <span className="font-extrabold tracking-tight text-neutral-900 dark:text-white text-base">
                   CODERUSH
                 </span>
-                <span className="text-xs font-mono px-1.5 py-0.5 rounded bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700">
-                  KANBAN
-                </span>
+              
               </div>
            
             </div>
