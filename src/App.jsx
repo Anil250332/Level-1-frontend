@@ -19,6 +19,10 @@ export default function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const [priorityFilter, setPriorityFilter] = useState('All');
   const [darkMode, setDarkMode] = useState(() => {
+    try {
+      const saved = localStorage.getItem('coderush_theme');
+      if (saved) return saved === 'dark';
+    } catch (e) {}
     return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   });
 
@@ -40,12 +44,19 @@ export default function App() {
     }, 3200);
   };
 
-  // Sync dark mode class on html tag
+  // Sync dark mode class on html tag and persist to localStorage
   useEffect(() => {
+    const root = document.documentElement;
     if (darkMode) {
-      document.documentElement.classList.add('dark');
+      root.classList.add('dark');
+      try {
+        localStorage.setItem('coderush_theme', 'dark');
+      } catch (e) {}
     } else {
-      document.documentElement.classList.remove('dark');
+      root.classList.remove('dark');
+      try {
+        localStorage.setItem('coderush_theme', 'light');
+      } catch (e) {}
     }
   }, [darkMode]);
 
