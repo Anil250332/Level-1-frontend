@@ -95,14 +95,16 @@ export default function KanbanColumn({
           </span>
         </div>
 
-        <button
-          type="button"
-          onClick={() => onAddTaskToColumn(column.id)}
-          title={`Add task to ${column.title}`}
-          className="p-1 rounded text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 hover:bg-neutral-200/70 dark:hover:bg-neutral-800 transition-colors"
-        >
-          <Plus size={15} />
-        </button>
+        {column.id !== 'completed' && (
+          <button
+            type="button"
+            onClick={() => onAddTaskToColumn(column.id)}
+            title={`Add task to ${column.title}`}
+            className="p-1 rounded text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 hover:bg-neutral-200/70 dark:hover:bg-neutral-800 transition-colors"
+          >
+            <Plus size={15} />
+          </button>
+        )}
       </div>
 
       {/* Task Cards Area (Shows maximum 5 cards per page) */}
@@ -137,13 +139,15 @@ export default function KanbanColumn({
                 <p className="text-xs font-mono">
                   {isOver ? 'Drop here to move' : 'No tasks in this column'}
                 </p>
-                <button
-                  type="button"
-                  onClick={() => onAddTaskToColumn(column.id)}
-                  className="mt-2 text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:underline"
-                >
-                  + Create one
-                </button>
+                {column.id !== 'completed' && (
+                  <button
+                    type="button"
+                    onClick={() => onAddTaskToColumn(column.id)}
+                    className="mt-2 text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:underline"
+                  >
+                    + Create one
+                  </button>
+                )}
               </div>
             )}
           </>

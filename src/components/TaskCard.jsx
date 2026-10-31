@@ -67,14 +67,16 @@ export default function TaskCard({
 
         {/* Action icons on hover */}
         <div className="opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity flex items-center gap-1">
-          <button
-            type="button"
-            onClick={() => onEdit(task)}
-            title="Edit task"
-            className="p-1 rounded text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-          >
-            <Edit3 size={13} />
-          </button>
+          {task.status !== 'completed' && (
+            <button
+              type="button"
+              onClick={() => onEdit(task)}
+              title="Edit task"
+              className="p-1 rounded text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-neutral-100 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
+            >
+              <Edit3 size={13} />
+            </button>
+          )}
           <button
             type="button"
             onClick={() => onDelete(task.id)}
