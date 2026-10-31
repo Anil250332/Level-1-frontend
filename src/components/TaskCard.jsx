@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, AlertCircle, Clock, Trash2, Edit3, ArrowRight, ArrowLeft } from 'lucide-react';
+import { Calendar, AlertCircle, Clock, Trash2, Edit3, ArrowRight, ArrowLeft, Check } from 'lucide-react';
 
 export default function TaskCard({
   task,
@@ -115,30 +115,46 @@ export default function TaskCard({
           <span className="text-[11px] text-neutral-400 dark:text-neutral-600">No deadline</span>
         )}
 
-        {/* Quick move controls */}
+        {/* Quick move / Status indicator */}
         <div className="flex items-center gap-1 text-[11px] font-mono">
-          {task.status !== 'todo' && (
-            <button
-              type="button"
-              onClick={() => onMoveColumn(task.id, task.status === 'completed' ? 'in-progress' : 'todo')}
-              title="Move backward"
-              className="px-1.5 py-0.5 rounded text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800"
-            >
-              <ArrowLeft size={11} className="inline mr-0.5" />
-              prev
-            </button>
-          )}
-
-          {task.status !== 'completed' && (
-            <button
-              type="button"
-              onClick={() => onMoveColumn(task.id, task.status === 'todo' ? 'in-progress' : 'completed')}
-              title="Move forward"
-              className="px-1.5 py-0.5 rounded text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800"
-            >
-              next
-              <ArrowRight size={11} className="inline ml-0.5" />
-            </button>
+          {task.status === 'completed' ? (
+            <div className="flex items-center gap-1">
+              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-800/60">
+                <Check size={11} className="stroke-[2.5]" />
+                Completed
+              </span>
+              <button
+                type="button"
+                onClick={() => onMoveColumn(task.id, 'in-progress')}
+                title="Move back to In Progress"
+                className="opacity-0 group-hover:opacity-100 px-1 py-0.5 rounded text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-opacity"
+              >
+                <ArrowLeft size={11} className="inline" />
+              </button>
+            </div>
+          ) : (
+            <>
+              {task.status === 'in-progress' && (
+                <button
+                  type="button"
+                  onClick={() => onMoveColumn(task.id, 'todo')}
+                  title="Move backward to To Do"
+                  className="px-1.5 py-0.5 rounded text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800"
+                >
+                  <ArrowLeft size={11} className="inline mr-0.5" />
+                  prev
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={() => onMoveColumn(task.id, task.status === 'todo' ? 'in-progress' : 'completed')}
+                title={task.status === 'in-progress' ? 'Mark Completed' : 'Start Task'}
+                className="px-1.5 py-0.5 rounded text-neutral-600 hover:text-neutral-950 dark:text-neutral-300 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 font-medium"
+              >
+                {task.status === 'in-progress' ? 'complete' : 'next'}
+                <ArrowRight size={11} className="inline ml-0.5" />
+              </button>
+            </>
           )}
         </div>
       </div>
