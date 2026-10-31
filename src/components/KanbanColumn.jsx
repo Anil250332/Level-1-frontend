@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
-import { Plus } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import TaskCard from './TaskCard';
 import TaskSkeleton from './TaskSkeleton';
+
+const ITEMS_PER_PAGE = 5;
 
 export default function KanbanColumn({
   column,
@@ -16,6 +18,19 @@ export default function KanbanColumn({
   onDropTask,
 }) {
   const [isOver, setIsOver] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(tasks.length / ITEMS_PER_PAGE) || 1;
+
+  // Auto-adjust page if tasks are moved or deleted
+  useEffect(() => {
+    if (currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [tasks.length, totalPages, currentPage]);
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const visibleTasks = tasks.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   const handleDragOver = (e) => {
     e.preventDefault();
@@ -90,7 +105,7 @@ export default function KanbanColumn({
         </button>
       </div>
 
-      {/* Task Cards Area */}
+      {/* Task Cards Area (Shows maximum 5 cards per page) */}
       <div className="flex-1 flex flex-col gap-2.5 min-h-[380px] overflow-y-auto pr-0.5">
         {loading ? (
           <>
@@ -99,7 +114,7 @@ export default function KanbanColumn({
           </>
         ) : (
           <>
-            {tasks.map((task) => (
+            {visibleTasks.map((task) => (
               <TaskCard
                 key={task.id}
                 task={task}
@@ -134,6 +149,41 @@ export default function KanbanColumn({
           </>
         )}
       </div>
+
+      {/* Column Pagination (Active when column has > 5 cards) */}
+      {!loading && totalPages > 1 && (
+        <div className="flex items-center justify-between pt-2.5 mt-2 border-t border-neutral-200/70 dark:border-neutral-800 text-[11px] font-mono">
+          <span className="text-neutral-500 dark:text-neutral-400">
+            {startIndex + 1}–{Math.min(startIndex + ITEMS_PER_PAGE, tasks.length)} of {tasks.length}
+          </span>
+
+          <div className="flex items-center gap-1">
+            <button
+              type="button"
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              className="p-1 rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors shadow-2xs"
+              title="Previous 5 cards"
+            >
+              <ChevronLeft size={13} />
+            </button>
+
+            <span className="px-1.5 font-bold text-neutral-800 dark:text-neutral-200">
+              {currentPage} / {totalPages}
+            </span>
+
+            <button
+              type="button"
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              className="p-1 rounded border border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 disabled:opacity-30 disabled:cursor-not-allowed hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors shadow-2xs"
+              title="Next 5 cards"
+            >
+              <ChevronRight size={13} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

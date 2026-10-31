@@ -99,7 +99,7 @@ export default function TaskCard({
       )}
 
       {/* Footer Info: Due Date & Quick Move */}
-      <div className="pt-2 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between text-xs">
+      <div className="pt-1.5 flex items-center justify-between text-xs">
         {task.dueDate ? (
           <div
             className={`flex items-center gap-1.5 font-mono text-[11px] ${

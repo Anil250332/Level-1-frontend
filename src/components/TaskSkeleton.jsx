@@ -23,7 +23,7 @@ export default function TaskSkeleton() {
       </div>
 
       {/* Footer / Due Date & Quick Move */}
-      <div className="pt-2.5 border-t border-neutral-100 dark:border-neutral-800/80 flex items-center justify-between">
+      <div className="pt-2 flex items-center justify-between">
         <div className="h-3 w-20 bg-neutral-200 dark:bg-neutral-800 rounded"></div>
         <div className="h-3 w-12 bg-neutral-100 dark:bg-neutral-800/60 rounded"></div>
       </div>
