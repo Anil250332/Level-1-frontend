@@ -173,6 +173,15 @@ export default function App() {
     setIsModalOpen(true);
   };
 
+  // Priority ranking weights
+  const PRIORITY_RANK = {
+    Urgent: 4,
+    High: 3,
+    Normal: 2,
+    Medium: 2,
+    Low: 1,
+  };
+
   // Filter tasks based on search and priority
   const filteredTasks = tasks.filter((task) => {
     const matchesSearch =
@@ -181,10 +190,35 @@ export default function App() {
       task.description?.toLowerCase().includes(searchQuery.toLowerCase());
 
     const matchesPriority =
-      priorityFilter === 'All' || task.priority === priorityFilter;
+      priorityFilter === 'All' ||
+      task.priority === priorityFilter ||
+      (priorityFilter === 'Normal' && (task.priority === 'Normal' || task.priority === 'Medium'));
 
     return matchesSearch && matchesPriority;
   });
+
+  // Specified Feature: High Priority tasks must appear before Normal Priority tasks in each column
+  const getSortedColumnTasks = (columnId) => {
+    return filteredTasks
+      .filter((t) => t.status === columnId)
+      .sort((a, b) => {
+        const rankA = PRIORITY_RANK[a.priority] || 2;
+        const rankB = PRIORITY_RANK[b.priority] || 2;
+
+        if (rankB !== rankA) {
+          return rankB - rankA; // Higher priority tasks come first
+        }
+
+        // Tie-breaker: earlier due date first
+        if (a.dueDate && b.dueDate) {
+          return new Date(a.dueDate) - new Date(b.dueDate);
+        }
+        if (a.dueDate) return -1;
+        if (b.dueDate) return 1;
+
+        return (a.order || 0) - (b.order || 0);
+      });
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors">
@@ -239,7 +273,7 @@ export default function App() {
 
             {/* Priority Filter Pills */}
             <div className="flex items-center gap-0.5 bg-white dark:bg-neutral-900 p-1 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-xs">
-              {['All', 'Urgent', 'High', 'Medium', 'Low'].map((p) => (
+              {['All', 'Urgent', 'High', 'Normal', 'Low'].map((p) => (
                 <button
                   key={p}
                   type="button"
@@ -283,7 +317,7 @@ export default function App() {
             <KanbanColumn
               key={column.id}
               column={column}
-              tasks={filteredTasks.filter((t) => t.status === column.id)}
+              tasks={getSortedColumnTasks(column.id)}
               loading={loading}
               onAddTaskToColumn={handleOpenCreateModal}
               onEditTask={handleEditTask}

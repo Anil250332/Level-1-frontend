@@ -39,6 +39,7 @@ export default function TaskCard({
         return 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 font-bold';
       case 'High':
         return 'bg-neutral-800 text-neutral-100 dark:bg-neutral-800 dark:text-neutral-200 border border-neutral-700 font-semibold';
+      case 'Normal':
       case 'Medium':
         return 'bg-neutral-200 text-neutral-800 dark:bg-neutral-800/80 dark:text-neutral-300 border border-neutral-300 dark:border-neutral-700';
       case 'Low':
@@ -61,7 +62,7 @@ export default function TaskCard({
             task.priority
           )}`}
         >
-          {task.priority || 'Medium'}
+          {task.priority === 'Medium' ? 'Normal' : task.priority || 'Normal'}
         </span>
 
         {/* Action icons on hover */}

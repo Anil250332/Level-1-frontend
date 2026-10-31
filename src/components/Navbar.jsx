@@ -23,63 +23,16 @@ export default function Navbar({
                 <span className="font-extrabold tracking-tight text-neutral-900 dark:text-white text-base">
                   CODERUSH
                 </span>
-                <span className="text-neutral-300 dark:text-neutral-700 font-light">/</span>
-                <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
-                  Smart Kanban
-                </span>
-                <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                  Sprint 1.0
-                </span>
+                 
+             
+             
               </div>
-            </div>
-
-            {/* Center: Live System & DB Status Pill */}
-            <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-100/80 dark:bg-neutral-900 border border-neutral-200/80 dark:border-neutral-800 text-xs font-mono">
-              <Radio size={12} className="text-emerald-500 animate-pulse" />
-              <span className="text-neutral-700 dark:text-neutral-300 font-medium">
-                {storageSource === 'mongodb' ? 'MongoDB Atlas' : 'Local Storage Sync'}
-              </span>
-              <span className="text-neutral-400 dark:text-neutral-600">•</span>
-              <span className="text-neutral-500 dark:text-neutral-400 text-[11px]">
-                3 Columns Active
-              </span>
             </div>
 
             {/* Right: Team Avatars Stack, Shortcuts, GitHub & Theme */}
             <div className="flex items-center gap-2.5">
-              {/* Team Members Presence Stack */}
-              <div className="hidden lg:flex items-center -space-x-1.5 pl-2">
-                <div
-                  title="Team Lead: Anil Sahu"
-                  className="w-7 h-7 rounded-full bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 text-[10px] font-bold flex items-center justify-center border-2 border-white dark:border-neutral-950 shadow-xs"
-                >
-                  AS
-                </div>
-                <div
-                  title="Frontend & UI"
-                  className="w-7 h-7 rounded-full bg-neutral-700 dark:bg-neutral-300 text-white dark:text-neutral-900 text-[10px] font-bold flex items-center justify-center border-2 border-white dark:border-neutral-950 shadow-xs"
-                >
-                  CR
-                </div>
-                <div
-                  title="Active Workspace"
-                  className="w-7 h-7 rounded-full bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 text-[10px] font-medium flex items-center justify-center border-2 border-white dark:border-neutral-950 shadow-xs"
-                >
-                  +2
-                </div>
-              </div>
 
-              {/* Keyboard Shortcuts Helper Button */}
-              <button
-                type="button"
-                onClick={() => setShowShortcuts(true)}
-                title="Keyboard Shortcuts"
-                className="hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 text-xs font-mono transition-colors"
-              >
-                <Terminal size={13} />
-                <span>Shortcuts</span>
-              </button>
+         
 
               {/* GitHub Link */}
               <a

@@ -4,7 +4,7 @@ import { X, Calendar, Flag, AlertCircle, Check } from 'lucide-react';
 export default function TaskModal({ isOpen, onClose, onSave, editingTask, initialStatus }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('Medium');
+  const [priority, setPriority] = useState('Normal');
   const [status, setStatus] = useState('todo');
   const [dueDate, setDueDate] = useState('');
   const [error, setError] = useState('');
@@ -13,13 +13,14 @@ export default function TaskModal({ isOpen, onClose, onSave, editingTask, initia
     if (editingTask) {
       setTitle(editingTask.title || '');
       setDescription(editingTask.description || '');
-      setPriority(editingTask.priority || 'Medium');
+      const p = editingTask.priority === 'Medium' ? 'Normal' : (editingTask.priority || 'Normal');
+      setPriority(p);
       setStatus(editingTask.status || 'todo');
       setDueDate(editingTask.dueDate || '');
     } else {
       setTitle('');
       setDescription('');
-      setPriority('Medium');
+      setPriority('Normal');
       setStatus(initialStatus || 'todo');
       setDueDate('');
     }
@@ -142,7 +143,7 @@ export default function TaskModal({ isOpen, onClose, onSave, editingTask, initia
                 Priority
               </label>
               <div className="grid grid-cols-4 gap-1 p-1 bg-neutral-100 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700 text-xs">
-                {['Low', 'Medium', 'High', 'Urgent'].map((p) => (
+                {['Low', 'Normal', 'High', 'Urgent'].map((p) => (
                   <button
                     key={p}
                     type="button"
