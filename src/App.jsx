@@ -4,7 +4,7 @@ import MetricsBar from './components/MetricsBar';
 import KanbanColumn from './components/KanbanColumn';
 import TaskModal from './components/TaskModal';
 import { api } from './services/api';
-import { CheckCircle2, AlertCircle, Info, RefreshCw } from 'lucide-react';
+import { Search, Plus, RefreshCw, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const COLUMNS = [
   { id: 'todo', title: 'To Do' },
@@ -177,15 +177,10 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-100 transition-colors">
-      {/* Navbar */}
+      {/* Top Clean Navbar */}
       <Navbar
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        priorityFilter={priorityFilter}
-        setPriorityFilter={setPriorityFilter}
         darkMode={darkMode}
         setDarkMode={setDarkMode}
-        onOpenCreateModal={() => handleOpenCreateModal('todo')}
         storageSource={storageSource}
       />
 
@@ -194,52 +189,101 @@ export default function App() {
         {/* Sprint Overview Metrics */}
         <MetricsBar tasks={tasks} />
 
-        {/* Board Header & Live status */}
-        <div className="flex items-center justify-between mb-4">
+        {/* Task Board Header & Integrated Action Toolbar (Moved right above tasks) */}
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3.5 mb-5 pb-4 border-b border-neutral-200/80 dark:border-neutral-800">
           <div>
             <h1 className="text-xl font-bold tracking-tight text-neutral-900 dark:text-white">
               Sprint Board
             </h1>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">
-              Drag cards to re-prioritize or move between sprint stages. Changes persist across refresh.
+            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+              Drag cards between columns or use quick-move to re-prioritize.
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={loadTasks}
-            title="Refresh tasks from server"
-            className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono rounded-lg border border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors"
-          >
-            <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
-            <span>Sync</span>
-          </button>
+          {/* Controls: Search, Priority Pills, Sync & + New Task */}
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Search Bar */}
+            <div className="relative min-w-[200px] sm:min-w-[240px] flex-1 sm:flex-initial">
+              <Search
+                size={14}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-400"
+              />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search tasks..."
+                className="w-full pl-9 pr-7 py-1.5 text-xs bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-lg focus:outline-none focus:border-neutral-900 dark:focus:border-neutral-100 text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 shadow-xs"
+              />
+              {searchQuery && (
+                <button
+                  type="button"
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+
+            {/* Priority Filter Pills */}
+            <div className="flex items-center gap-0.5 bg-white dark:bg-neutral-900 p-1 rounded-lg border border-neutral-200 dark:border-neutral-800 shadow-xs">
+              {['All', 'Urgent', 'High', 'Medium', 'Low'].map((p) => (
+                <button
+                  key={p}
+                  type="button"
+                  onClick={() => setPriorityFilter(p)}
+                  className={`px-2 py-0.5 rounded text-[11px] font-mono transition-all ${
+                    priorityFilter === p
+                      ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 font-bold shadow-xs'
+                      : 'text-neutral-500 hover:text-neutral-900 dark:hover:text-white'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+
+            {/* Sync Button */}
+            <button
+              type="button"
+              onClick={loadTasks}
+              title="Refresh tasks from server"
+              className="p-2 rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-900 text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors shadow-xs"
+            >
+              <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+            </button>
+
+            {/* New Task Button */}
+            <button
+              type="button"
+              onClick={() => handleOpenCreateModal('todo')}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-neutral-900 hover:bg-neutral-800 dark:bg-white dark:text-neutral-900 dark:hover:bg-neutral-200 text-white text-xs font-semibold shadow-xs transition-all active:scale-95"
+            >
+              <Plus size={14} />
+              <span>New Task</span>
+            </button>
+          </div>
         </div>
 
-        {/* 3 Kanban Columns */}
-        {loading && tasks.length === 0 ? (
-          <div className="flex-1 flex items-center justify-center py-20 text-xs font-mono text-neutral-500">
-            <RefreshCw size={16} className="animate-spin mr-2" />
-            Loading Kanban board...
-          </div>
-        ) : (
-          <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
-            {COLUMNS.map((column) => (
-              <KanbanColumn
-                key={column.id}
-                column={column}
-                tasks={filteredTasks.filter((t) => t.status === column.id)}
-                onAddTaskToColumn={handleOpenCreateModal}
-                onEditTask={handleEditTask}
-                onDeleteTask={handleDeleteTask}
-                onMoveColumn={handleMoveColumn}
-                onDragStart={handleDragStart}
-                onDragEnd={handleDragEnd}
-                onDropTask={handleDropTask}
-              />
-            ))}
-          </div>
-        )}
+        {/* 3 Kanban Columns with Skeleton Loading */}
+        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-5 items-start">
+          {COLUMNS.map((column) => (
+            <KanbanColumn
+              key={column.id}
+              column={column}
+              tasks={filteredTasks.filter((t) => t.status === column.id)}
+              loading={loading}
+              onAddTaskToColumn={handleOpenCreateModal}
+              onEditTask={handleEditTask}
+              onDeleteTask={handleDeleteTask}
+              onMoveColumn={handleMoveColumn}
+              onDragStart={handleDragStart}
+              onDragEnd={handleDragEnd}
+              onDropTask={handleDropTask}
+            />
+          ))}
+        </div>
       </main>
 
       {/* Task Creation & Edit Modal */}

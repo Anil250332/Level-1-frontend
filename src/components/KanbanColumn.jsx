@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Plus } from 'lucide-react';
 import TaskCard from './TaskCard';
+import TaskSkeleton from './TaskSkeleton';
 
 export default function KanbanColumn({
   column,
   tasks,
+  loading = false,
   onAddTaskToColumn,
   onEditTask,
   onDeleteTask,
@@ -22,7 +24,6 @@ export default function KanbanColumn({
   };
 
   const handleDragLeave = (e) => {
-    // Only turn off if leaving column container
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setIsOver(false);
     }
@@ -75,7 +76,7 @@ export default function KanbanColumn({
             {column.title}
           </h3>
           <span className="px-2 py-0.5 rounded-full text-[11px] font-mono font-medium bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300">
-            {tasks.length}
+            {loading ? '...' : tasks.length}
           </span>
         </div>
 
@@ -91,37 +92,46 @@ export default function KanbanColumn({
 
       {/* Task Cards Area */}
       <div className="flex-1 flex flex-col gap-2.5 min-h-[380px] overflow-y-auto pr-0.5">
-        {tasks.map((task) => (
-          <TaskCard
-            key={task.id}
-            task={task}
-            onEdit={onEditTask}
-            onDelete={onDeleteTask}
-            onMoveColumn={onMoveColumn}
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-          />
-        ))}
+        {loading ? (
+          <>
+            <TaskSkeleton />
+            <TaskSkeleton />
+          </>
+        ) : (
+          <>
+            {tasks.map((task) => (
+              <TaskCard
+                key={task.id}
+                task={task}
+                onEdit={onEditTask}
+                onDelete={onDeleteTask}
+                onMoveColumn={onMoveColumn}
+                onDragStart={onDragStart}
+                onDragEnd={onDragEnd}
+              />
+            ))}
 
-        {tasks.length === 0 && (
-          <div
-            className={`flex-1 flex flex-col items-center justify-center p-6 border border-dashed rounded-lg text-center transition-colors ${
-              isOver
-                ? 'border-neutral-900 dark:border-white bg-white/40 dark:bg-neutral-800/40 text-neutral-900 dark:text-white'
-                : 'border-neutral-300 dark:border-neutral-800/80 text-neutral-400 dark:text-neutral-600'
-            }`}
-          >
-            <p className="text-xs font-mono">
-              {isOver ? 'Drop here to move' : 'No tasks in this column'}
-            </p>
-            <button
-              type="button"
-              onClick={() => onAddTaskToColumn(column.id)}
-              className="mt-2 text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:underline"
-            >
-              + Create one
-            </button>
-          </div>
+            {tasks.length === 0 && (
+              <div
+                className={`flex-1 flex flex-col items-center justify-center p-6 border border-dashed rounded-lg text-center transition-colors ${
+                  isOver
+                    ? 'border-neutral-900 dark:border-white bg-white/40 dark:bg-neutral-800/40 text-neutral-900 dark:text-white'
+                    : 'border-neutral-300 dark:border-neutral-800/80 text-neutral-400 dark:text-neutral-600'
+                }`}
+              >
+                <p className="text-xs font-mono">
+                  {isOver ? 'Drop here to move' : 'No tasks in this column'}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => onAddTaskToColumn(column.id)}
+                  className="mt-2 text-xs font-semibold text-neutral-800 dark:text-neutral-200 hover:underline"
+                >
+                  + Create one
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
